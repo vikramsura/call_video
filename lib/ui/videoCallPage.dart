@@ -1,56 +1,68 @@
-import 'dart:convert';
 import 'package:agora_uikit/agora_uikit.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-//id  : 9280222aa4714481bf17a651c347b30d
-// token  :https://agora-node-tokenserver.vikramsura35.repl.co/
-// temptoken  :007eJxTYGBqiHeYl9HQY5bs96u71OGcwt+TD3ev/2/wv119wW6d/+8UGMwsLC1NjA0SzVOSEk2SDFMtExMNTY0MgQwj42QTsxTvwKTUhkBGBj/L74yMDBAI4rMwhKQWlzAwAACy4iCd
-class VideoCall extends StatefulWidget {
-  String ?channelName ;
 
-  VideoCall({required this.channelName});
+class VideoCall extends StatefulWidget {
+  const VideoCall({super.key});
   @override
-  _VideoCallState createState() => _VideoCallState();
+  State<VideoCall> createState() => _VideoCallState();
 }
 
 class _VideoCallState extends State<VideoCall> {
-  late final AgoraClient _client;
+  late AgoraClient _client;
   bool _loading = true;
-  String? tempToken;
+  String appId = "6899430a7dba4b1e9aa15211e923c46d";
+  String tempToken =
+      "007eJxTYOC2MEtJS7u460xC6Xl/3xWtT65XH/XW1+OwONP+4fUazS0KDGYWlpYmxgaJ5ilJiSZJhqmWiYmGpkaGQIaRcbKJWcpCV/20hkBGhntWvYyMDBAI4rMwlKRWlDAwAABHvh9l";
+  String channelName = "text";
+
+  // Future<void> getToken() async {
+  //   try {
+  //     String link =
+  //         "https://ba2dda7a-aad9-4e5c-85bc-764c0f035063-00-qcnbfzjs2d8b.pike.replit.dev/access_token?channelName=${widget.channelName}";
+  //
+  //     Response response = await get(Uri.parse(link));
+  //     print(" link......$link");
+  //     print("_response.statusCode......${response.statusCode}");
+  //     print("response.body.....${response.body}");
+  //
+  //     if (response.statusCode == 200) {
+  //       var data = jsonDecode(response.body);
+  //       print("Parsed JSON data: $data");
+  //
+  //     } else {
+  //       print("Failed to fetch token. Status code: ${response.statusCode}");
+  //     }
+  //   } catch (e) {
+  //     print("error.....$e");
+  //   }
+  // }
+  agoraClient() async {
+    _client = AgoraClient(
+        agoraConnectionData: AgoraConnectionData(
+          appId: appId,
+          tempToken: tempToken,
+          tempRtmToken: tempToken,
+          channelName: channelName,
+          rtmChannelName: channelName,
+          rtmEnabled: true,
+        ),
+        enabledPermission: [Permission.camera, Permission.microphone]);
+    await _client.initialize();
+
+    Future.delayed(const Duration(seconds: 1)).then(
+      (value) {
+        setState(() {
+          _loading = false;
+        });
+      },
+    );
+  }
 
   @override
   void initState() {
-    getToken();
+    agoraClient();
+    // TODO: implement initState
     super.initState();
-  }
-
-  Future<void> getToken() async {
-    String link =
-        "https://agora-node-tokenserver.vikramsura35.repl.co/access_token?channelName=${widget.channelName}";
-
-    Response _response = await get(Uri.parse(link));
-    Map data = jsonDecode(_response.body);
-    setState(() {
-      tempToken = data["token"];
-    });
-
-    _client = AgoraClient(
-        agoraConnectionData: AgoraConnectionData(
-          appId: "6899430a7dba4b1e9aa15211e923c46d",
-          tempToken: tempToken,
-          channelName: widget.channelName.toString(),
-        ),
-        enabledPermission: [Permission.camera, Permission.microphone]);
-
-    await _client.initialize();
-
-    Future.delayed(Duration(seconds: 1)).then((value) {
-      setState(() {
-        _loading=false;
-
-      });
-    },
-    );
   }
 
   @override
@@ -58,23 +70,24 @@ class _VideoCallState extends State<VideoCall> {
     return Scaffold(
       body: SafeArea(
         child: _loading
-            ? Center(
-          child: CircularProgressIndicator(),
-        )
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
             : Stack(
-          children: [
-            AgoraVideoViewer(
-              client: _client,
-              layoutType: Layout.floating,
-              enableHostControls: true,
-            ),
-
-            AgoraVideoButtons(
-                client: _client,
-              autoHideButtons: true,
-            )
-          ],
-        ),
+                children: [
+                  AgoraVideoViewer(
+                    client: _client,
+                    layoutType: Layout.floating,
+                    enableHostControls: true,
+                    showAVState: true,
+                    showNumberOfUsers: true,
+                  ),
+                  AgoraVideoButtons(
+                    client: _client,
+                    autoHideButtons: true,
+                  )
+                ],
+              ),
       ),
     );
     ;

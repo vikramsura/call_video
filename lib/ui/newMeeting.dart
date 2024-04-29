@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:untitled2/allData/allData.dart';
 import 'package:untitled2/allData/font_sizes.dart';
-import 'package:untitled2/ui/videoCallPage.dart';
 import 'package:uuid/uuid.dart';
 
 import '../allData/colorPage.dart';
@@ -20,7 +19,7 @@ class _NewMeetingState extends State<NewMeeting> {
   @override
   void initState() {
     var uuid = Uuid();
-    _meetingCode = uuid.v1().substring(0,6);
+    _meetingCode = uuid.v1().substring(0, 6);
     super.initState();
   }
 
@@ -29,14 +28,14 @@ class _NewMeetingState extends State<NewMeeting> {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.only(left: 12,right: 12,top: 12),
+          padding: const EdgeInsets.only(left: 12, right: 12, top: 12),
           child: Column(
             children: [
               Align(
                 alignment: Alignment.topLeft,
                 child: InkWell(
                   child: Icon(Icons.arrow_back_ios_new_sharp, size: 35),
-                  onTap:() {
+                  onTap: () {
                     Navigator.pop(context);
                   },
                 ),
@@ -68,7 +67,6 @@ class _NewMeetingState extends State<NewMeeting> {
               ElevatedButton.icon(
                 onPressed: () {
                   Share.share("Meeting Code : $_meetingCode");
-
                 },
                 icon: Icon(Icons.arrow_drop_down,
                     color: AppBodyColor.white, size: AppFontSize.font20),
@@ -76,20 +74,19 @@ class _NewMeetingState extends State<NewMeeting> {
                     AppTextColor.white, FontWeight.bold),
                 style: ElevatedButton.styleFrom(
                     backgroundColor: AppBodyColor.deepPurple,
-                    fixedSize: Size(
-                        MediaQuery.of(context).size.width/2, AppFontSize.font50),
+                    fixedSize: Size(MediaQuery.of(context).size.width / 2,
+                        AppFontSize.font50),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12))),
               ),
               SizedBox(height: AppFontSize.font20),
-
               OutlinedButton.icon(
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => VideoCall(channelName: _meetingCode.trim()),
-                      ));
+                  // Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //       builder: (context) => VideoCall(channelName: _meetingCode.trim()),
+                  //     ));
                 },
                 icon: Icon(Icons.video_call,
                     color: AppBodyColor.deepPurple, size: AppFontSize.font20),

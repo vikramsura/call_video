@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:untitled2/allData/allData.dart';
 import 'package:untitled2/allData/colorPage.dart';
 import 'package:untitled2/allData/font_sizes.dart';
-import 'package:untitled2/ui/videoCallPage.dart';
+
 class JoinWithCode extends StatefulWidget {
   JoinWithCode({Key? key}) : super(key: key);
   @override
@@ -50,27 +50,32 @@ class _JoinWithCodeState extends State<JoinWithCode> {
                 child: TextField(
                   controller: controller,
                   textAlign: TextAlign.center,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       contentPadding: EdgeInsetsDirectional.all(20),
                       border: InputBorder.none,
-                      hintText: "Example : abc-efg-dhi"),
+                      hintText: "Enter code"),
                 ),
               ),
               SizedBox(height: AppFontSize.font20),
               ElevatedButton.icon(
                 onPressed: () {
-                  //
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => VideoCall(
-                            channelName: controller.text.trim()),
-                      ));
+                  if (controller.text.trim().isEmpty
+                      // ||
+                      // controller.text.trim().length < 6
+                      ) {
+                  } else {
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //       builder: (context) =>
+                    //           VideoCall(channelName: controller.text.trim()),
+                    //     ));
+                  }
                 },
                 icon: Icon(Icons.add,
                     color: AppBodyColor.white, size: AppFontSize.font20),
-                label: buildText("Join", AppFontSize.font20,
-                    AppTextColor.white, FontWeight.bold),
+                label: buildText("Join", AppFontSize.font20, AppTextColor.white,
+                    FontWeight.bold),
                 style: ElevatedButton.styleFrom(
                     backgroundColor: AppBodyColor.deepPurple,
                     fixedSize: Size(MediaQuery.of(context).size.width / 2,
